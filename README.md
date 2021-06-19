@@ -8,3 +8,4 @@ Abyssal Monkey is an abyssal bot for eveonline. I did not develope the origional
 #2 Support for random weapon configurations
 #3 Support for Multi tank types
 #4 Support for cap injectors
+
