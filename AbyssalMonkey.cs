@@ -15,10 +15,18 @@ namespace EVEAbyssalMonkey {
 	private bool	_LocalCheck	= false; 
 	private bool 	_PropMod	= false;
 	private bool	_Hardners	= false;
-	int			_FilamentLimit 	= 1;
-	int 		_AmmoAMT		= 2000;
-	string 		_Drones			= "10";
-
+	private bool _PrimeWeapon	= false;
+	int 	_Maxtargets 		= 5;
+	int		_FilamentLimit 		= 1;
+	string	_FilamentName		= "Agitated Exotic Filament";
+	int 	_AmmoAMT			= 2000;
+	string	_AmmoName			= "Missle name goes here";
+	int 	_DronesInShip		= 10;
+	
+	string	_ABYBM 				= "Abyssal Site";
+	string 	_HomeBM 			= "HOME";
+	int 	_BreakTime 			= 120; // Minutes
+	
 	### End Config
 
 	public void AbyssalRun()
@@ -26,7 +34,7 @@ namespace EVEAbyssalMonkey {
 		
 		
 		}
-	#### Processes ####
+	#### Process Loop ####
 	public void _InSpaceCheck()
 	{}
 	public void _StationCheck()
@@ -37,8 +45,25 @@ namespace EVEAbyssalMonkey {
 	{}
 	public void _Undock()
 	{}
+	public void _WarpToBookmark
+	{}
+	public void _UseFilament()
+	{} 
+	public void _Combat() // Includes looting and abyssalgate use
+	{}
+	public void _Propmod
+	{}
+	public void _Hardners
+	{}
+	public void _SandAReppers
+	{}
+	public void _Loot
+	{}
+	public void _UseAbyssGate
+	{}
 	public void _Dock()
 	{}
+	
 
 #### Utilities ####
 public string Time()
