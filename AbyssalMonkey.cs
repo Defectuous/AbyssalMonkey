@@ -87,21 +87,21 @@ namespace EVEAbyssalMonkey {
 	{}
 	public void _Undock()
 	{}
-	public void _WarpToBookmark
+	public void _WarpToBookmark()
 	{}
 	public void _UseFilament() // includes activation
 	{} 
 	public void _Combat() 
 	{}
-	public void _Propmod
+	public void _Propmod()
 	{}
-	public void _Hardners
+	public void _Hardners()
 	{}
-	public void _SandAReppers // Shield and Armor Reppers
+	public void _SandAReppers() // Shield and Armor Reppers
 	{}
-	public void _Loot
+	public void _Loot()
 	{}
-	public void _UseAbyssGate
+	public void _UseAbyssGate()
 	{}
 	public void _Dock()
 	{}
