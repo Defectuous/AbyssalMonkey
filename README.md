@@ -1,11 +1,7 @@
 # AbyssalMonkey
-The origional developer of this is Kwevin from the isxGames discord. The origional name of this was abyss.iss
-As I did not develope the origional basecode for this, and was given it to do whatever i choose. I have chosen to evolve this code into Abyssal Monkey
-Abyssal Monkey is an abyssal bot for eveonline. I did not develope the origional base code for this but I am working on updating it to include more dynamic features such as the following.
+The origional code this is based on is Kwevin from the isxGames discord. The origional name of this was abyss.iss
+AbyssalMonkey is a completeoverhaul in C# using ISXEVEWrapper rather than lavish script
+The goal is to rebuild this with a simple gui to start and end the bot
 
-#0 Fix Filiment use
-#1 Simple Gui
-#2 Support for random weapon configurations
-#3 Support for Multi tank types
-#4 Support for cap injectors
+
 
