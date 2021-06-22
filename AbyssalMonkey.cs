@@ -29,7 +29,7 @@ namespace EVEAbyssalMonkey {
 	
 	# Ammo Stuff
 	int 			_AmmoAMT		= 2000; // Amount of ammo to stock before each run
-	string			_AmmoName		= "Ammo name goes here";
+	string			_AmmoName		= "Scourge Fury Light Missle";
 	
 	# Drone Stuff
 	int 			_DronesInShip	= 10;
@@ -76,7 +76,9 @@ namespace EVEAbyssalMonkey {
 		}
 	#### Process Loop ####
 	public void _InSpaceCheck()
-	{}
+	{
+		if ($Me.InSpace = TRUE) { _DockUp();  }
+	}
 	public void _StationCheck()
 	{}
 	public void _Locals()
@@ -86,11 +88,16 @@ namespace EVEAbyssalMonkey {
 	public void _LoadCargo()
 	{}
 	public void _Undock()
-	{}
+	{
+		EVE:Execute[CmdExitStation]
+		Client:Wait[10000]
+	}
 	public void _WarpToBookmark()
 	{}
 	public void _UseFilament() // includes activation
-	{} 
+	{
+		if ()	
+	} 
 	public void _Combat() 
 	{}
 	public void _Propmod()
@@ -103,7 +110,7 @@ namespace EVEAbyssalMonkey {
 	{}
 	public void _UseAbyssGate()
 	{}
-	public void _Dock()
+	public void _DockUp()
 	{}
 	
 
