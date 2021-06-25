@@ -95,7 +95,7 @@ function localClearWait()
 
     while !${localClear}
     {
-        wait 60
+        wait 600
 
         wait ${Math.Rand[100]}
 
@@ -103,7 +103,7 @@ function localClearWait()
         localClear:Set[${Return}]
     }
 
-    echo Clear!
+    echo Local is Clear!
 }
 
 function lootInv()
@@ -133,8 +133,10 @@ function lootInv()
             }
 
             EVE:MoveItemsTo[lootIDs, ${MyShip.ID}, CargoHold]
+			echo Stacking Cargo
+			EVEWindow["Inventory"]:StackAll
         }
-
+		
         counter:Inc
     }
 }
@@ -268,7 +270,7 @@ function inSite()
 
     SiteEntities:Set[blank]
 	EVE:Toggle3DDisplay
-
+	echo Just disabled 3D
     wait 20
 
     EVE:QueryEntities[SiteEntities]
@@ -287,7 +289,7 @@ function inSite()
 
     MyShip.Module[MedSlot0]:Activate
     MyShip.Module[MedSlot1]:Activate
-    MyShip.Module[MedSlot2]:Activate
+    ;MyShip.Module[MedSlot2]:Activate
 
     enemExist:Set[FALSE]
 
@@ -323,7 +325,7 @@ function inSite()
 
     variable int counter3=1
     variable int counter4=1
-    while ${enemExist}
+	while ${enemExist}
     {
         echo Rats to kill - Starting main loop
         counter:Set[1]
@@ -349,7 +351,7 @@ function inSite()
 
         call ifDronesIdle
 
-        wait 10
+        wait 5
         if !${enemExist}
         {
             EVE:QueryEntities[SiteEntities]
@@ -446,37 +448,41 @@ function inSite()
 
         ;shoot management---------------------------
         ;TODO SHOOT
-        ;echo GOT TO SHOOT
-        ;if ${lockCount} > 0
-        ;{
-        ;    if !${MyShip.Module[HiSlot0].Get[1].IsActive}
-        ;    {
-        ;        echo PEW
-        ;        MyShip.Module[HiSlot0]:Activate
-        ;    }
-        ;    call ifDronesIdle
-        ;    echo AFTER DROENS
-        ;}
+        echo GOT TO SHOOT
+        if ${lockCount} > 0
+        {
+            currentLocked[0]:MakeActiveTarget
+            if !${MyShip.Module[HiSlot0].IsActive} && ${currentLocked[0].Distance} < 30000
+            {
+                echo Fire Ze Misslez
+                MyShip.Module[HiSlot0]:Activate
+            }
+            call ifDronesIdle
+            echo AFTER DROENS
+        }
 
         ;module management
+		; Hardner 1
         if !${MyShip.Module[MedSlot1].IsActive}
         {
             MyShip.Module[MedSlot1]:Activate
+			echo Hardner One Activated
 
             wait 10
         }
-
-        if !${MyShip.Module[MedSlot2].IsActive}
-        {
-            MyShip.Module[MedSlot2]:Activate
-
-            wait 10
-        }
-
+		; Hardner 2
+        ;if !${MyShip.Module[MedSlot2].IsActive}
+        ;{
+        ;    MyShip.Module[MedSlot2]:Activate
+		;    echo Module Two Activated
+        ;    wait 10
+        ;}
+		
+		; Prop Mod
         if !${MyShip.Module[MedSlot0].IsActive}
         {
             MyShip.Module[MedSlot0]:Activate
-
+			echo Prop Mod Activated
             wait 10
         }
 
@@ -574,7 +580,7 @@ function inSite()
 
     ;kill cache
 
-    wait 30
+    wait 5
 
     EVE:Execute[CmdDronesEngage]
 
@@ -675,7 +681,8 @@ function inSite()
     {
         wait 10
     }
-
+	
+	EVE:Execute[CmdReloadAmmo]
     gate:Activate
 
     wait 10
@@ -755,7 +762,7 @@ function inAbyss()
 
     MyShip.Module[MedSlot0]:Deactivate
     MyShip.Module[MedSlot1]:Deactivate
-    MyShip.Module[MedSlot2]:Deactivate
+    ;MyShip.Module[MedSlot2]:Deactivate
 }
 
 function acFilament()
@@ -900,7 +907,7 @@ function goFilamentBase()
 {
     variable index:bookmark bookmarks
     variable int counter
-
+	echo Time to Dock Up
     EVE:GetBookmarks[bookmarks]
 
     counter:Set[1]
@@ -996,7 +1003,6 @@ function getFilaments()
     variable index:int64 ids
     variable index:item loot
     variable index:int64 lootIDs
-    ;EVEWindow["Inventory"]:Minimize
     EVEWindow[byCaption,"Inventory"]:GetChildren[windows,ids]
 
     variable int counter=1
@@ -1030,6 +1036,46 @@ function getFilaments()
     }
 }
 
+function getAmmo()
+{
+    variable index:eveinvchildwindow windows
+    variable index:int64 ids
+    variable index:item loot
+    variable index:int64 lootIDs
+    ;EVEWindow["Inventory"]:Minimize
+    EVEWindow[byCaption,"Inventory"]:GetChildren[windows,ids]
+
+    variable int counter=1
+    while ${counter} < 50
+    {
+        if ${windows.Get[${counter}].Name.Equal["StationItems"]}
+        {
+            windows.Get[${counter}]:GetItems[loot]
+
+            variable int counter5=1
+            while ${loot.Get[${counter5}].ID}
+            {
+                if ${loot.Get[${counter5}].Name.Equal["Scourge Fury Light Missile"]}
+                {
+                    if ${loot.Get[${counter5}].Quantity} > 2000
+                    {
+                        loot.Get[${counter5}]:MoveTo[${MyShip.ID}, CargoHold, 3000]
+                        return 0
+                    }
+                    else
+                    { 
+                        ;return NF
+                    }
+                }
+				
+                counter5:Inc
+            }
+        }
+
+        counter:Inc
+    }
+}
+
 function getDrones()
 {
     variable index:eveinvchildwindow windows
@@ -1046,15 +1092,11 @@ function getDrones()
     echo ${MyShip.UsedDronebayCapacity}
 
     wait 20
-    ;TODO close window better
+    ;TODO close window betterscourge 
 
     EVEWindow[ByCaption, "Drone Bay"]:Minimize
 
     wait 20
-
-    EVEWindow[ByCaption, "Drone Bay"]:Maximize
-
-    wait 10
 
     EVEWindow[active]:Close
 
@@ -1108,6 +1150,9 @@ function getDrones()
 
     if ${dronesMissing.Equal[0]}
     {
+		EVEWindow[Inventory].ChildWindow[${Me.ShipID},Dronebay]:StackAll
+		wait 5
+		EVEWindow[Inventory].ChildWindow[${Me.ShipID},Dronebay]:Close
         return 0
     }
     else
@@ -1118,11 +1163,20 @@ function getDrones()
 
 function fullLoop()
 {
-    call getFilaments
+    
+	call emptyShip
+	
+	wait 15
+	
+	call getFilaments
 	
 	wait 10
-
-    call getDrones
+	
+	call getAmmo
+	
+	wait 10
+	
+	call getDrones
 
     wait 10
 
@@ -1138,20 +1192,20 @@ function fullLoop()
 
     wait 100
 
-    call emptyShip
+
 }
 
 function totalLoop()
 {
     variable int counter=1
 
-    while ${counter} < 10
+    while ${counter} < 100
     {
-        call fullLoop
-
-        wait 100
-
+        echo Loop ${counter}
+		call fullLoop
+        wait 15
         counter:Inc
+		
     }
 }
 
