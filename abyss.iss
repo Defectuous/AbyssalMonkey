@@ -1,7 +1,73 @@
 ; Abyss.iss is origionally developed by kwevin from the isxgames discord
-; i an currently updating and revising this for myselfand others.
+; i an currently updating and revising this for myself and others.
 ; - Lost in Space ( isxgames Discord )
 
+; Future Location for Config
+
+;Filament "Fierce Exotic Filament "
+;Ammo "Scourge Fury Light Missile"
+;Drugs( "Quafe Zero","Agency 'Pyrolancea' DB5 Dose II")
+;LoopAMT 100
+
+
+; The loop that controls the loop, that controlls the loop
+function main()
+{
+    call totalLoop
+}
+
+; The loop that controls the loop
+function totalLoop()
+{
+    variable int counter=1
+
+    while ${counter} < 100
+    {
+        echo Loop ${counter}
+		
+		call fullLoop
+        wait 15
+        counter:Inc
+		
+    }
+}
+
+; The loop that is
+function fullLoop()
+{
+    
+	call emptyShip
+	
+	wait 15
+	
+	call getFilaments
+	
+	wait 10
+	
+	call getAmmo
+	
+	wait 10
+	
+	call getDrones
+
+    wait 10
+
+    call goToFilament
+
+    wait 20
+
+    call atFilaSpot
+
+    wait 200
+
+    call goFilamentBase
+
+    wait 100
+
+
+}
+
+; Standings stuff
 function getHighestStanding(pilot p)
 {
     variable int highestStanding
@@ -61,6 +127,7 @@ function getHighestStanding(pilot p)
     return ${highestStanding}
 }
 
+; Checking local
 function checkLocal()
 {
     variable index:pilot LocalPilots
@@ -86,6 +153,7 @@ function checkLocal()
     return ${allGood}
 }
 
+; in case local is hostile, wait till it's not
 function localClearWait()
 {
     variable bool localClear
@@ -106,13 +174,14 @@ function localClearWait()
     echo Local is Clear!
 }
 
+; Loot that shit why is this here ?
 function lootInv()
 {
     variable index:eveinvchildwindow windows
     variable index:int64 ids
     variable index:item loot
     variable index:int64 lootIDs
-    ;EVEWindow["Inventory"]:Minimize
+    
     EVEWindow[byCaption,"Inventory"]:GetChildren[windows,ids]
 
     variable int counter=1
@@ -141,6 +210,7 @@ function lootInv()
     }
 }
 
+; Apperently need to look that specific wreck
 function interactWreck()
 {
     variable entity wreck
@@ -162,6 +232,7 @@ function interactWreck()
 
 }
 
+;Pull in the drones
 function recallDroneWait()
 {
     variable index:activedrone drones
@@ -189,6 +260,7 @@ function recallDroneWait()
     }
 }
 
+; Make those drones do work
 function ifDronesIdle()
 {
     variable index:activedrone activeDrones
@@ -261,6 +333,7 @@ function ifDronesIdle()
     }
 }
 
+
 function inSite()
 {
     variable int counter=1
@@ -271,11 +344,11 @@ function inSite()
     SiteEntities:Set[blank]
 	EVE:Toggle3DDisplay
 	echo Just disabled 3D
-    wait 20
+    wait 5
 
     EVE:QueryEntities[SiteEntities]
 
-    wait 20
+    wait 10
 
     if !${SiteEntities.Get[${counter}]}
     {
@@ -289,7 +362,7 @@ function inSite()
 
     MyShip.Module[MedSlot0]:Activate
     MyShip.Module[MedSlot1]:Activate
-    ;MyShip.Module[MedSlot2]:Activate
+    ;MyShip.Module[MedSlot2]:Activate ; Disabled cause i am not using it in my current fit
 
     enemExist:Set[FALSE]
 
@@ -584,7 +657,7 @@ function inSite()
 
     EVE:Execute[CmdDronesEngage]
 
-    wait 20
+    wait 5
 
     Me:GetTargets[currentLocked]
 
@@ -620,7 +693,7 @@ function inSite()
 
     EVE:Execute[CmdDronesReturnToBay]
 
-    wait 20
+    wait 5
 
     ;approach wreck
     variable entity wreck
@@ -640,21 +713,21 @@ function inSite()
     echo DISTANCE TO WRECK ${wreck.DistanceTo[${MyShip.ID}]}
     while ${wreck.DistanceTo[${MyShip.ID}]} > 1500
     {
-        echo WRECK TOO FAR
+        ; holy fuck batman, the wreck is still to far away
+		echo WRECK TOO FAR
         wait 10
     }
 
+	; Open the Wreck
     call interactWreck
 
     wait 20
-
+	; Time to Really look that wreck
     call lootInv
 
     wait 10
 
-
-
-
+	; NEXT or GTFO
     ;approcah gate
     variable entity gate
     EVE:QueryEntities[SiteEntities]
@@ -681,7 +754,7 @@ function inSite()
     {
         wait 10
     }
-	
+	; Reload launchers so when we dock the guns are full
 	EVE:Execute[CmdReloadAmmo]
     gate:Activate
 
@@ -710,6 +783,7 @@ function inSite()
 
 }
 
+; Why is this here ? we know they will show up.
 function waitEnemy()
 {
     variable int counter=1
@@ -728,7 +802,8 @@ function waitEnemy()
         {
             if ${SiteEntities.Get[${counter}].Group.Equal["Abyssal Spaceship Entities"]} || ${SiteEntities.Get[${counter}].Group.Equal["Abyssal Drone Entities"]}
             {
-                if !${SiteEntities.Get[${counter}].Name.Equal["Vila Swarmer"]}
+                ; Basicly, these can be ignored, just time wasting fodder ( really good for smartbombs IDEA !!! )
+				if !${SiteEntities.Get[${counter}].Name.Equal["Vila Swarmer"]}
                 {
                     echo KILL ${SiteEntities.Get[${counter}].Name}
                     enemExist:Set[TRUE]
@@ -746,7 +821,7 @@ function inAbyss()
 {
     call inSite
 
-    echo WAITING ENEMY
+    echo AWAITING ENEMY
 
     call waitEnemy
 
@@ -762,7 +837,7 @@ function inAbyss()
 
     MyShip.Module[MedSlot0]:Deactivate
     MyShip.Module[MedSlot1]:Deactivate
-    ;MyShip.Module[MedSlot2]:Deactivate
+    ;MyShip.Module[MedSlot2]:Deactivate ; Disabled cause yeah not using it ( maybe setup a config at the top for this )
 }
 
 function acFilament()
@@ -786,7 +861,7 @@ function acFilament()
             {
                 echo ${loot.Get[${counter2}].Name}
 				echo Testing Point 000
-                if ${loot.Get[${counter2}].Name.Equal["Agitated Exotic Filament"]}
+                if ${loot.Get[${counter2}].Name.Equal["Fierce Exotic Filament"]}
                 {
                     
 					if ${loot.Get[${counter2}].Quantity.Equal[1]}
@@ -796,7 +871,7 @@ function acFilament()
 							
                         wait 30
 						echo Activating Filament
-						EVEWindow[ByCaption, "Agitated Exotic Filament"].Button[button]:Press
+						EVEWindow[ByCaption, "Fierce Exotic Filament"].Button[button]:Press
 
                         ;call enterFIlament
                         
@@ -854,7 +929,8 @@ function atFilaSpot()
 
     call inAbyss
 }
-;TODO WARPWAIT BROKEN - MODE NOT WORKING ON SCIPT EXECUTION
+
+;TODO WARPWAIT BROKEN - MODE NOT WORKING ON SCIPT EXECUTION ( really need to review this )
 function warpWait()
 {
     wait 100
@@ -903,6 +979,7 @@ function goToFilament()
     wait 500
 }
 
+; Needs a better name, go home or wsomething
 function goFilamentBase()
 {
     variable index:bookmark bookmarks
@@ -933,6 +1010,7 @@ function goFilamentBase()
     }
 }
 
+;holy fuck this is simple and i love it
 function repairShip()
 {
     MyShip.ToItem:GetRepairQuote
@@ -956,6 +1034,7 @@ function repairShip()
     wait 20
 }
 
+;Unload the loot
 function emptyShip()
 {
     variable index:eveinvchildwindow windows
@@ -997,6 +1076,7 @@ function emptyShip()
     call repairShip
 }
 
+; Get the filament needed ( need to have a preset cofig for this )
 function getFilaments()
 {
     variable index:eveinvchildwindow windows
@@ -1015,7 +1095,7 @@ function getFilaments()
             variable int counter2=1
             while ${loot.Get[${counter2}].ID}
             {
-                if ${loot.Get[${counter2}].Name.Equal["Agitated Exotic Filament"]}
+                if ${loot.Get[${counter2}].Name.Equal["Fierce Exotic Filament"]}
                 {
                     if ${loot.Get[${counter2}].Quantity} > 0
                     {
@@ -1036,6 +1116,7 @@ function getFilaments()
     }
 }
 
+; stole this from above and made it work, get the ammo you need. Also needs config )
 function getAmmo()
 {
     variable index:eveinvchildwindow windows
@@ -1076,6 +1157,8 @@ function getAmmo()
     }
 }
 
+; this is confusing, need to understand why all the extra zero's in console from the math
+; Also this looks over complicated look into getting it simplified.
 function getDrones()
 {
     variable index:eveinvchildwindow windows
@@ -1150,8 +1233,11 @@ function getDrones()
 
     if ${dronesMissing.Equal[0]}
     {
+		; Does this actually stack the drones ?
+		echo Stacking Drones
 		EVEWindow[Inventory].ChildWindow[${Me.ShipID},Dronebay]:StackAll
 		wait 5
+		echo Closing Drone Window
 		EVEWindow[Inventory].ChildWindow[${Me.ShipID},Dronebay]:Close
         return 0
     }
@@ -1161,58 +1247,5 @@ function getDrones()
     }
 }
 
-function fullLoop()
-{
-    
-	call emptyShip
-	
-	wait 15
-	
-	call getFilaments
-	
-	wait 10
-	
-	call getAmmo
-	
-	wait 10
-	
-	call getDrones
-
-    wait 10
-
-    call goToFilament
-
-    wait 20
-
-    call atFilaSpot
-
-    wait 200
-
-    call goFilamentBase
-
-    wait 100
 
 
-}
-
-function totalLoop()
-{
-    variable int counter=1
-
-    while ${counter} < 100
-    {
-        echo Loop ${counter}
-		call fullLoop
-        wait 15
-        counter:Inc
-		
-    }
-}
-
-function main()
-{
-    ;TODO repair
-    ;TODO cap val check on reac mods
-    ;TODO GATE LOCKED?
-    call totalLoop
-}
