@@ -4,11 +4,12 @@
 
 ; Future Location for Config
 
-;Filament "Fierce Exotic Filament "
-;Ammo "Scourge Fury Light Missile"
+;variable string _Filament 	= "Fierce Exotic Filament"
+;variable string _Ammo		= "Scourge Fury Light Missile"
+;variable int 	_LoopAmt	= 100
 ;Drugs( "Quafe Zero","Agency 'Pyrolancea' DB5 Dose II")
-;LoopAMT 100
 
+; End of Future Config Stuff
 
 ; The loop that controls the loop, that controlls the loop
 function main()
@@ -21,14 +22,12 @@ function totalLoop()
 {
     variable int counter=1
 
-    while ${counter} < 100
+    while ${counter} < 10
     {
         echo Loop ${counter}
-		
 		call fullLoop
         wait 15
-        counter:Inc
-		
+        counter:Inc	
     }
 }
 
@@ -181,7 +180,7 @@ function lootInv()
     variable index:int64 ids
     variable index:item loot
     variable index:int64 lootIDs
-    
+    ;EVEWindow["Inventory"]:Minimize
     EVEWindow[byCaption,"Inventory"]:GetChildren[windows,ids]
 
     variable int counter=1
@@ -210,7 +209,7 @@ function lootInv()
     }
 }
 
-; Apperently need to look that specific wreck
+
 function interactWreck()
 {
     variable entity wreck
@@ -232,7 +231,7 @@ function interactWreck()
 
 }
 
-;Pull in the drones
+
 function recallDroneWait()
 {
     variable index:activedrone drones
@@ -260,7 +259,7 @@ function recallDroneWait()
     }
 }
 
-; Make those drones do work
+
 function ifDronesIdle()
 {
     variable index:activedrone activeDrones
@@ -362,8 +361,8 @@ function inSite()
 
     MyShip.Module[MedSlot0]:Activate
     MyShip.Module[MedSlot1]:Activate
-    ;MyShip.Module[MedSlot2]:Activate ; Disabled cause i am not using it in my current fit
-
+    ;MyShip.Module[MedSlot2]:Activate 
+	
     enemExist:Set[FALSE]
 
     while ${SiteEntities.Get[${counter}]}
@@ -478,8 +477,8 @@ function inSite()
         }
 
         echo LOCK COUNT ${lockCount}
-
-        ;max locked targets
+			
+		;max locked targets
         if ${lockCount} < 5
         {
             EVE:QueryEntities[SiteEntities]
@@ -524,8 +523,12 @@ function inSite()
         echo GOT TO SHOOT
         if ${lockCount} > 0
         {
-            currentLocked[0]:MakeActiveTarget
-            if !${MyShip.Module[HiSlot0].IsActive} && ${currentLocked[0].Distance} < 30000
+            currentLocked.Get[1]:MakeActiveTarget
+			echo ########### Module Check
+			echo !${MyShip.Module[HiSlot0].IsActive}
+			echo ${currentLocked.Get[1].Distance} <= 30000
+			echo ###########
+            if !${MyShip.Module[HiSlot0].IsActive} && ${currentLocked.Get[1].Distance} <= 30000
             {
                 echo Fire Ze Misslez
                 MyShip.Module[HiSlot0]:Activate
@@ -657,7 +660,7 @@ function inSite()
 
     EVE:Execute[CmdDronesEngage]
 
-    wait 5
+    wait 20
 
     Me:GetTargets[currentLocked]
 
@@ -710,7 +713,7 @@ function inSite()
         counter:Inc
     }
 
-    echo DISTANCE TO WRECK ${wreck.DistanceTo[${MyShip.ID}]}
+    
     while ${wreck.DistanceTo[${MyShip.ID}]} > 1500
     {
         ; holy fuck batman, the wreck is still to far away
@@ -1123,7 +1126,7 @@ function getAmmo()
     variable index:int64 ids
     variable index:item loot
     variable index:int64 lootIDs
-    ;EVEWindow["Inventory"]:Minimize
+    
     EVEWindow[byCaption,"Inventory"]:GetChildren[windows,ids]
 
     variable int counter=1
