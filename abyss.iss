@@ -4,10 +4,14 @@
 
 ; Future Location for Config
 
-;variable string _Filament 	= "Fierce Exotic Filament"
-;variable string _Ammo		= "Scourge Fury Light Missile"
-;variable int 	_LoopAmt	= 100
-;Drugs( "Quafe Zero","Agency 'Pyrolancea' DB5 Dose II")
+variable int 	_LoopAmt	= 100 ; The number of Filaments you want to run
+variable string _Filament 	= "Fierce Exotic Filament"
+variable string _Ammo		= "Scourge Fury Light Missile"
+variable int	_AmmoRange	= 30000
+variable string _Drones		= "Vespa II"
+variable int	_DroneRange	= 80000
+
+;variable string _Drugs( "Quafe Zero","Agency 'Pyrolancea' DB5 Dose II")
 
 ; End of Future Config Stuff
 
@@ -22,7 +26,7 @@ function totalLoop()
 {
     variable int counter=1
 
-    while ${counter} < 10
+    while ${counter} < ${_LoopAmt}
     {
         echo Loop ${counter}
 		call fullLoop
@@ -497,7 +501,7 @@ function inSite()
                     else
                     {
                         ;lock range
-                        if ${SiteEntities.Get[${counter}].Distance} < 80000
+                        if ${SiteEntities.Get[${counter}].Distance} < ${_DroneRange}
                         {
                             if ${SiteEntities.Get[${counter}].Group.Equal["Abyssal Spaceship Entities"]} || ${SiteEntities.Get[${counter}].Group.Equal["Abyssal Drone Entities"]}
                             {
@@ -864,7 +868,7 @@ function acFilament()
             {
                 echo ${loot.Get[${counter2}].Name}
 				echo Testing Point 000
-                if ${loot.Get[${counter2}].Name.Equal["Fierce Exotic Filament"]}
+                if ${loot.Get[${counter2}].Name.Equal[${_Filament}]}
                 {
                     
 					if ${loot.Get[${counter2}].Quantity.Equal[1]}
@@ -874,7 +878,7 @@ function acFilament()
 							
                         wait 30
 						echo Activating Filament
-						EVEWindow[ByCaption, "Fierce Exotic Filament"].Button[button]:Press
+						EVEWindow[ByCaption, ${_Filament}].Button[button]:Press
 
                         ;call enterFIlament
                         
@@ -1098,7 +1102,7 @@ function getFilaments()
             variable int counter2=1
             while ${loot.Get[${counter2}].ID}
             {
-                if ${loot.Get[${counter2}].Name.Equal["Fierce Exotic Filament"]}
+                if ${loot.Get[${counter2}].Name.Equal[${_Filament}]}
                 {
                     if ${loot.Get[${counter2}].Quantity} > 0
                     {
@@ -1139,7 +1143,7 @@ function getAmmo()
             variable int counter5=1
             while ${loot.Get[${counter5}].ID}
             {
-                if ${loot.Get[${counter5}].Name.Equal["Scourge Fury Light Missile"]}
+                if ${loot.Get[${counter5}].Name.Equal[${_Ammo}]}
                 {
                     if ${loot.Get[${counter5}].Quantity} > 2000
                     {
@@ -1210,7 +1214,7 @@ function getDrones()
                 variable int counter2=1
                 while ${loot.Get[${counter2}].ID}
                 {
-                    if ${loot.Get[${counter2}].Name.Equal["Vespa II"]}
+                    if ${loot.Get[${counter2}].Name.Equal[${_Drones}]}
                     {
                         if ${loot.Get[${counter2}].Quantity} > 0
                         {
