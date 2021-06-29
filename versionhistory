@@ -17,6 +17,5 @@ Current Version 1.4.7
 
 Fututre Notes
 Drug Support
-Add a Simple to use Gui
+Complete re-write for better timing less timing involved statements in the code.
 Support for running multiple abysses in a row before returning to station
-Complete re-write for better timing and else loops
