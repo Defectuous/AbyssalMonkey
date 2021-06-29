@@ -1,5 +1,5 @@
 ; Script notes are in version history
-; Version 1.4.5
+; Version 1.4.7
 
 ; Abyssal Config
 
@@ -10,6 +10,9 @@ variable int	_AmmoAMT	= 3000 ; 3k
 variable int	_AmmoRange	= 30000 ;30k
 variable string _Drones		= "Vespa II"
 variable int	_DroneRange	= 80000 ;80k
+; Bookmarks
+variable string _BMAbyss	= "Site" ; Bookmarked Safe Site for running Abyssals
+variable string _BMHome		= "Home" ; Docking Station
 
 ;variable string _Drugs( "Quafe Zero","Agency 'Pyrolancea' DB5 Dose II")
 
@@ -969,7 +972,7 @@ function goToFilament()
     counter:Set[1]
     while ${bookmarks.Get[${counter}].ID}
     {
-        if ${bookmarks.Get[${counter}].Label.Equal["Abyssal Site"]} && ${bookmarks.Get[${counter}].JumpsTo.Equal[0]}
+        if ${bookmarks.Get[${counter}].Label.Equal[${_BMAbyss}]} && ${bookmarks.Get[${counter}].JumpsTo.Equal[0]}
         {
             bookmarks.Get[${counter}]:WarpTo[0]
 
@@ -993,7 +996,7 @@ function goFilamentBase()
     counter:Set[1]
     while ${bookmarks.Get[${counter}].ID}
     {
-        if ${bookmarks.Get[${counter}].Label.Equal["Home"]} && ${bookmarks.Get[${counter}].JumpsTo.Equal[0]}
+        if ${bookmarks.Get[${counter}].Label.Equal[${_BMHome}]} && ${bookmarks.Get[${counter}].JumpsTo.Equal[0]}
         {
             bookmarks.Get[${counter}].ToEntity:Dock
 
