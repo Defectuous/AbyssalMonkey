@@ -1,27 +1,30 @@
 ; Script notes are in version history
-; Version 1.4.7
+variable int Version 1.4.8
 
 ; Abyssal Config
-
+; Number of filaments
 variable int 	_LoopAmt	= 100 ; The number of Filaments you want to run
 variable string _Filament 	= "Fierce Exotic Filament"
+; Ammo Stuff
 variable string _Ammo		= "Scourge Fury Light Missile"
 variable int	_AmmoAMT	= 3000 ; 3k
 variable int	_AmmoRange	= 30000 ;30k
+; Drone Info
 variable string _Drones		= "Vespa II"
 variable int	_DroneRange	= 80000 ;80k
 ; Bookmarks
 variable string _BMAbyss	= "Site" ; Bookmarked Safe Site for running Abyssals
 variable string _BMHome		= "Home" ; Docking Station
 
-;variable string _Drugs( "Quafe Zero","Agency 'Pyrolancea' DB5 Dose II")
+;variable string _Drugs("Agency 'Pyrolancea' DB5 Dose II")
 
 ; End of Config
 
 ; The loop that controls the loop, that controlls the loop
 function main()
 {
-    call totalLoop
+    echo Starting Abyssal Monkey v ${Version}
+	call totalLoop
 }
 
 ; The loop that controls the loop
@@ -46,6 +49,10 @@ function fullLoop()
 	
 	wait 15
 	
+	call getDrones
+
+    wait 10
+	
 	call getFilaments
 	
 	wait 10
@@ -54,11 +61,7 @@ function fullLoop()
 	
 	wait 10
 	
-	call getDrones
-
-    wait 10
-
-    call goToFilament
+	call goToFilament
 
     wait 20
 
@@ -1241,7 +1244,7 @@ function getDrones()
     {
 		; Does this actually stack the drones ?
 		echo Stacking Drones
-		EVEWindow[Inventory].ChildWindow[${Me.ShipID},Dronebay]:StackAll
+		EVE:StackItems[${Me.ShipID},Dronebay]
 		wait 5
 		echo Closing Drone Window
 		EVEWindow[Inventory].ChildWindow[${Me.ShipID},Dronebay]:Close
