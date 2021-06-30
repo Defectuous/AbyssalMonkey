@@ -1,5 +1,5 @@
 ; Script notes are in version history
-variable int Version 1.4.8
+;Version 1.4.8
 
 ; Abyssal Config
 ; Number of filaments
@@ -23,7 +23,7 @@ variable string _BMHome		= "Home" ; Docking Station
 ; The loop that controls the loop, that controlls the loop
 function main()
 {
-    echo Starting Abyssal Monkey v ${Version}
+    echo Starting Abyssal Monkey v1.4.8
 	call totalLoop
 }
 
