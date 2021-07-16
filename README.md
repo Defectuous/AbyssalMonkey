@@ -18,6 +18,8 @@ copy files into the AbyssalMonkey Folder
 
 Make sure your on the current TEST version of ISXEVE
 ISXEVE:InstallTest
+IMPORTANT: This means that we have to wait for cyber to update the test version after the live version
+this can take a couple days. So be aware after a patch it may be a couple days before you can use it.
 
 close your eve client and launcher
 restart both
