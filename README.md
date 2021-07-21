@@ -30,6 +30,10 @@ make sure missle and drone range matches, have the appropriate amount drones, am
 
 Make sure you have a bookmark for both your home station & your abyssal safe
 
+as for using missles, make sure your first 4 slots are the launchers
+then combine the launchers all into the first one. it can cause issues if you combine them on another slot. 
+I will get around to fixing this in time
+
 enter consol and type " Run AbyssalMonkey "
 
 
